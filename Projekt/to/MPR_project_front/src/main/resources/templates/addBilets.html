@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Bilets</title>
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+      font-family: Arial, sans-serif;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    input, button {
+      padding: 10px;
+      font-size: 16px;
+    }
+    button {
+      cursor: pointer;
+      border: none;
+      background-color: #28a745;
+      color: white;
+      border-radius: 5px;
+    }
+    button:hover {
+      background-color: #218838;
+    }
+  </style>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+<h1>Dodaj Bilet</h1>
+<form id="biletForm">
+  <input type="text" id="nameP" placeholder="Imię pasażera" required>
+  <input type="text" id="miejsceWylotu" placeholder="Miejsce wylotu" required>
+  <input type="text" id="miejscePrzylotu" placeholder="Miejsce przylotu" required>
+  <input type="text" id="numerSiedzenia" placeholder="Numer siedzenia" required>
+  <button type="submit">Dodaj Bilet</button>
+</form>
+
+<script>
+  $(document).ready(function() {
+    $("#biletForm").submit(function(event) {
+      event.preventDefault();
+
+      const biletData = {
+        nameP: $("#nameP").val(),
+        miejsceWylotu: $("#miejsceWylotu").val(),
+        miejscePrzylotu: $("#miejscePrzylotu").val(),
+        numerSiedzenia: $("#numerSiedzenia").val()
+      };
+
+      $.ajax({
+        url: "/bilet/addBilets",
+        method: "POST",
+        contentType: "application/json",
+        data: JSON.stringify(biletData),
+        success: function() {
+          alert("Bilet dodany pomyślnie!");
+          $("#biletForm")[0].reset();
+        },
+        error: function(xhr) {
+          console.error("Błąd:", xhr.responseText);
+          alert("Wystąpił błąd: " + xhr.responseText);
+        }
+      });
+    });
+  });
+</script>
+</body>
+</html>

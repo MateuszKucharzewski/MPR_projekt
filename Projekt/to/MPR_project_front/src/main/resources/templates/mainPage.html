@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        .button-container {
+            display: flex;
+            gap: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            background-color: #007BFF;
+            color: white;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+<h1>Witaj</h1>
+<div class="button-container">
+    <button id="goToAddBilets">Add Bilets</button>
+    <button id="fetchBilets">All Bilets</button>
+</div>
+
+<div id="biletList" style="margin-top:20px;"></div>
+
+<script>
+    $(document).ready(function() {
+        $("#fetchBilets").click(function() {
+            $.ajax({
+                url: "/bilet/all",
+                method: "GET",
+                dataType: "json",
+                success: function(data) {
+                    let html = "<ul>"; // Poprawione
+                    data.forEach(function(bilet) {
+                        html += `<li>ID: ${bilet.id}, Pasażer: ${bilet.nameP}, Wylot: ${bilet.miejsceWylotu}, Przylot: ${bilet.miejscePrzylotu}, Siedzenie: ${bilet.numerSiedzenia}</li>`;
+                    });
+                    html += "</ul>";
+                    $("#biletList").html(html);
+                },
+                error: function() {
+                    alert("Błąd pobierania biletów");
+                }
+            });
+        });
+
+        $("#goToAddBilets").click(function() {
+            window.location.href = "/bilet/addBilets";
+        });
+    });
+</script>
+</body>
+</html>

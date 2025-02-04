@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>All Bilets</title>
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+      font-family: Arial, sans-serif;
+    }
+    table {
+      width: 80%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid black;
+      padding: 10px;
+      text-align: left;
+    }
+    th {
+      background-color: #007BFF;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+<h1>Lista Wszystkich Biletów</h1>
+<table>
+  <thead>
+  <tr>
+    <th>ID</th>
+    <th>Imię Pasażera</th>
+    <th>Miejsce Wylotu</th>
+    <th>Miejsce Przylotu</th>
+    <th>Numer Siedzenia</th>
+  </tr>
+  </thead>
+  <tbody id="biletTableBody">
+  <!-- Bilety zostaną tutaj dodane dynamicznie -->
+  </tbody>
+</table>
+
+<script>
+  fetch("/bilet/all")
+          .then(response => response.json())
+          .then(data => {
+            const tableBody = document.getElementById("biletTableBody");
+            data.forEach(bilet => {
+              const row = document.createElement("tr");
+              row.innerHTML = `
+                        <td>${bilet.id}</td>
+                        <td>${bilet.nameP}</td>
+                        <td>${bilet.miejsceWylotu}</td>
+                        <td>${bilet.miejscePrzylotu}</td>
+                        <td>${bilet.numerSiedzenia}</td>
+                    `;
+              tableBody.appendChild(row);
+            });
+          })
+          .catch(error => console.error("Błąd: ", error));
+</script>
+</body>
+</html>
